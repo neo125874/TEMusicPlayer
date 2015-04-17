@@ -54,6 +54,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/seek_bar"
         android:layout_below="@+id/tv_status"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp" />
+        android:layout_marginTop="25dp"
+        android:layout_alignRight="@+id/btn_stop"
+        android:layout_alignEnd="@+id/btn_stop"
+        android:layout_alignLeft="@+id/btn_play"
+        android:layout_alignStart="@+id/btn_play" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New ToggleButton"
+        android:id="@+id/tb_loop"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:checked="false" />
 </RelativeLayout>

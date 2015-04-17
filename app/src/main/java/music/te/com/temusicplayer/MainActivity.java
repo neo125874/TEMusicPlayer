@@ -10,12 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 
 public class MainActivity extends ActionBarActivity {
 
     TextView tv_status;
     Button btn_play, btn_pause, btn_stop;
+    ToggleButton tb_loop;
     SeekBar seek_bar;
 
     MediaPlayer player;
@@ -38,6 +40,7 @@ public class MainActivity extends ActionBarActivity {
         btn_play = (Button) findViewById(R.id.btn_play);
         btn_pause = (Button) findViewById(R.id.btn_pause);
         btn_stop = (Button) findViewById(R.id.btn_stop);
+        tb_loop = (ToggleButton) findViewById(R.id.tb_loop);
 
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,19 +52,67 @@ public class MainActivity extends ActionBarActivity {
         btn_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                player.pause();
+                if(player != null)
+                    player.pause();
                 tv_status.setText("Paused...");
             }
         });
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(player != null)
+                {
+                    player.pause();
+                    player.seekTo(0);
+                }
+                tv_status.setText("Stop...");
+            }
+        });
+        tb_loop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(tb_loop.isChecked())
+                {
+                    if(player != null)
+                    {
+                        if(!player.isLooping())
+                            player.setLooping(true);
+                        else
+                            player.setLooping(false);
+                    }
+                }
             }
         });
 
         player = MediaPlayer.create(this, R.raw.a2_1);
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                player.release();
+            }
+        });
+
         seek_bar.setMax(player.getDuration());
+        seek_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser)
+                {
+                    player.seekTo(progress);
+                    seek_bar.setProgress(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     public void seekUpdation()
@@ -78,6 +129,13 @@ public class MainActivity extends ActionBarActivity {
             seekUpdation();
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        if(player != null)
+            player.release();
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
