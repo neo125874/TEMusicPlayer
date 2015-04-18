@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        player = MediaPlayer.create(this, R.raw.a2_1);
+        //player = MediaPlayer.create(this, R.raw.a2_1);
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
